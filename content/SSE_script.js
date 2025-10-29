@@ -50,6 +50,12 @@
 
   // If you can follow the logic above, it'll get here, and this is where the action really happens
   function wwt_ready() {
+    // Hide Azure error warning since WWT loaded successfully
+    var azureError = document.getElementById('azure-error-warning');
+    if (azureError) {
+      azureError.style.display = 'none';
+    }
+
     wwt_ctl = wwtlib.WWTControl.singleton;
     wwt_stc = wwtlib.SpaceTimeController;
 
