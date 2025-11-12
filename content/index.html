@@ -20,8 +20,22 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 
         <script>
+          window.onloadCallbacks = [];
+
+          window.onload = function() {
+            window.onloadCallbacks.forEach(func => func());
+            delete window.onloadCallbacks;
+          }
+
+          function runOnLoad(func) {
+            if (document.readyState != "loading") {
+              func();
+            } else {
+              window.onloadCallbacks.push(func);
+            }
+          }
+
           function sdkTimeoutClear() {
-            console.log(`Clearing ${window.sdkTimeout}`);
             clearTimeout(window.sdkTimeout);
           }
 
@@ -32,21 +46,20 @@
             }
           }
 
-          function sdkError() {
-            showSdkErrorBanner();
+          function onSdkError() {
+            runOnLoad(showSdkErrorBanner);
           }
 
           window.sdkTimeout = setTimeout(function timeout() {
-            console.log('Timeout');
-            showSdkErrorBanner();
-          }, 2);
+            runOnLoad(showSdkErrorBanner);
+          }, 10_000);
         </script>
 		
         <!-- Newer SDK! -->
         <script
           src="//web.wwtassets.org/engine/7/wwtsdk.js"
           onload="sdkTimeoutClear()"
-          onerror="window.onload = sdkError"
+          onerror="onSdkError()"
         ></script>
 		
 		<!-- Javascript links for jQuery and Bootstrap and FontAwesome -->
