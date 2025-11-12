@@ -18,16 +18,35 @@
 		
 		<!-- import Roboto font -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-		
-        <!-- Newer SDK! -->
-        <script
-          src="//web.wwtassets.org/engine/7/wwtsdk.js"
-          onerror="window.onload = function() {
+
+        <script>
+          function sdkTimeoutClear() {
+            console.log(`Clearing ${window.sdkTimeout}`);
+            clearTimeout(window.sdkTimeout);
+          }
+
+          function showSdkErrorBanner() {
             const banner = document.getElementById('script-error-warning');
             if (banner) {
               banner.style.display = 'unset';
             }
-          }"
+          }
+
+          function sdkError() {
+            showSdkErrorBanner();
+          }
+
+          window.sdkTimeout = setTimeout(function timeout() {
+            console.log('Timeout');
+            showSdkErrorBanner();
+          }, 2);
+        </script>
+		
+        <!-- Newer SDK! -->
+        <script
+          src="//web.wwtassets.org/engine/7/wwtsdk.js"
+          onload="sdkTimeoutClear()"
+          onerror="window.onload = sdkError"
         ></script>
 		
 		<!-- Javascript links for jQuery and Bootstrap and FontAwesome -->
